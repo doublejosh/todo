@@ -1,5 +1,12 @@
 import React, { useState } from 'react'
 import { Button } from './Button'
+import {
+  FaCheckCircle,
+  FaRegCheckCircle,
+  FaRegWindowClose,
+  FaPlusCircle,
+  FaEraser,
+} from 'react-icons/fa'
 
 export interface Todo {
   id: string
@@ -23,7 +30,7 @@ export const TodoView: React.FC<TodoViewProps> = ({ item, ...props }) => {
     setDesc(e.target.value)
   }
 
-  const handleDone = (item: Todo, done: boolean = true) => {
+  const handleDoneToggle = (item: Todo, done: boolean = true) => {
     props.setItem({ ...item, desc, done })
   }
 
@@ -34,9 +41,17 @@ export const TodoView: React.FC<TodoViewProps> = ({ item, ...props }) => {
   return (
     <div className={`todo-item todo-item--${item.done ? 'complete' : 'incomlpete'}`}>
       {!item.done ? (
-        <Button label="Done" onClick={() => handleDone(item)} />
+        <Button
+          label="Done"
+          icon={<FaCheckCircle />}
+          onClick={() => handleDoneToggle(item)}
+        />
       ) : (
-        <Button label="Todo" onClick={() => handleDone(item, false)} />
+        <Button
+          label="Todo"
+          icon={<FaRegCheckCircle />}
+          onClick={() => handleDoneToggle(item, false)}
+        />
       )}
       <input
         placeholder="New todo"
@@ -45,7 +60,11 @@ export const TodoView: React.FC<TodoViewProps> = ({ item, ...props }) => {
         onChange={handleChange}
       />
       {desc !== descInit && <Button label="Save" onClick={() => handleSave(item)} />}
-      <Button label="Delete" onClick={() => props.deleteItem(item.id)} />
+      <Button
+        label="Delete"
+        icon={<FaRegWindowClose />}
+        onClick={() => props.deleteItem(item.id)}
+      />
     </div>
   )
 }
@@ -62,6 +81,7 @@ export const NewItem: React.FC<{ addItem: (desc: string) => void }> = ({ addItem
       />
       <Button
         label="Add"
+        icon={<FaPlusCircle />}
         onClick={() => {
           if (desc) {
             addItem(desc)
@@ -69,7 +89,7 @@ export const NewItem: React.FC<{ addItem: (desc: string) => void }> = ({ addItem
           }
         }}
       />
-      <Button label="Cancel" onClick={() => setDesc('')} />
+      <Button label="Cancel" icon={<FaEraser />} onClick={() => setDesc('')} />
     </div>
   )
 }
