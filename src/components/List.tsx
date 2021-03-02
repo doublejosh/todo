@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { TodoView, Todo, NewItem } from './Todo'
 
 export interface List {
@@ -11,6 +11,7 @@ interface ListViewProps {
   setItem: (item: Todo) => void
   deleteItem: (id: string) => void
   addItem: (desc: string) => void
+  // setTodos: Dispatch<SetStateAction<Map<string, Todo>>>
 }
 
 export const ListView: React.FC<ListViewProps> = ({ todoList, ...props }) => {
@@ -28,8 +29,9 @@ export const ListView: React.FC<ListViewProps> = ({ todoList, ...props }) => {
           deleteItem={props.deleteItem}
         />
       )
+      console.log(todoList)
     })
-  }, [todoList.todos])
+  }, [todoList])
 
   return (
     <div>

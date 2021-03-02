@@ -1,16 +1,22 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import './App.css'
 import { Todo } from './components/Todo'
 import { ListView } from './components/List'
 import { Button } from './components/Button'
 import { sha256 } from 'crypto-hash'
+import { logger } from './utils/logger'
 
 import { default as sampleData } from './test/data/sample-todos.json'
 
 const App: React.FC<{}> = () => {
   const [todoList, setTodos] = useState<Map<string, Todo>>(new Map())
+  // maps don't seem to allow state listening
+  const [, updateState] = React.useState<object>()
+  const forceUpdate = useCallback(() => updateState({}), [])
+
   const updateMap = (k: string, v: Todo) => {
     setTodos(todoList.set(k, v))
+    forceUpdate()
   }
 
   const setItem = (item: Todo) => {
@@ -21,6 +27,7 @@ const App: React.FC<{}> = () => {
   const deleteItem = (id: string) => {
     todoList.delete(id)
     setTodos(todoList)
+    forceUpdate()
   }
 
   const addItem = async (desc: string) => {
@@ -33,11 +40,15 @@ const App: React.FC<{}> = () => {
         created: date.toString(),
         updated: date.toString(),
       })
+      forceUpdate()
+      logger('Item Added')
     })
   }
 
   const clearList = () => {
     setTodos(new Map())
+    forceUpdate()
+    logger('List cleared')
   }
 
   const loadSample = () => {
@@ -46,9 +57,12 @@ const App: React.FC<{}> = () => {
       sampleList.set(t.id, t)
     })
     setTodos(sampleList)
+    forceUpdate()
   }
 
-  useEffect(() => {}, [updateMap, addItem])
+  useEffect(() => {
+    console.log('BUILDING!')
+  }, [updateMap, addItem, setItem, deleteItem])
 
   return (
     <div className="App">
