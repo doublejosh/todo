@@ -1,5 +1,5 @@
 import { buildQueries } from '@testing-library/react'
-import React, { ReactDOM, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { TodoView, Todo, NewItem } from './Todo'
 
 export interface List {
@@ -14,20 +14,25 @@ interface ListViewProps {
   addItem: (desc: string) => void
 }
 
-export const ListView: React.FC<ListViewProps> = ({ todoList, ...props }) => (
-  <div>
-    {Array.from(todoList.todos.keys()).map((id: string, index: number) => {
-      const item = todoList.todos.get(id)
-      return item ? (
-        <TodoView
-          key={index}
-          item={item}
-          setItem={props.setItem}
-          deleteItem={props.deleteItem}
-        />
-      ) : null
-    })}
-    <NewItem addItem={props.addItem} />
-    <hr />
-  </div>
-)
+export const ListView: React.FC<ListViewProps> = ({ todoList, ...props }) => {
+  useEffect(() => {}, [todoList])
+
+  return (
+    <div>
+      {Array.from(todoList.todos.keys()).map((id: string, index: number) => {
+        const item = todoList.todos.get(id)
+        return item ? (
+          <TodoView
+            key={id}
+            item={item}
+            setItem={props.setItem}
+            deleteItem={props.deleteItem}
+          />
+        ) : null
+      })}
+      <hr />
+      <NewItem addItem={props.addItem} />
+      <hr />
+    </div>
+  )
+}

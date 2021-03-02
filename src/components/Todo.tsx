@@ -23,21 +23,30 @@ export const TodoView: React.FC<TodoViewProps> = ({ item, ...props }) => {
     setDesc(e.target.value)
   }
 
-  const handleDone = () => {
-    props.setItem({ ...item, desc, done: true })
+  const handleDone = (item: Todo, done: boolean = true) => {
+    props.setItem({ ...item, desc, done })
   }
 
-  const handleSave = () => {
+  const handleSave = (item: Todo) => {
     props.setItem({ ...item, desc })
   }
 
   return (
-    <form>
-      <input placeholder="New todo" value={item.desc} onChange={handleChange} />
-      <Button label="Done!" onClick={() => handleDone} />
-      {desc !== descInit && <Button label="Save" onClick={handleSave} />}
+    <div className={`todo-item todo-item--${item.done ? 'complete' : 'incomlpete'}`}>
+      {!item.done ? (
+        <Button label="Done" onClick={() => handleDone(item)} />
+      ) : (
+        <Button label="Todo" onClick={() => handleDone(item, false)} />
+      )}
+      <input
+        placeholder="New todo"
+        defaultValue={item.desc}
+        type="text"
+        onChange={handleChange}
+      />
+      {desc !== descInit && <Button label="Save" onClick={() => handleSave(item)} />}
       <Button label="Delete" onClick={() => props.deleteItem(item.id)} />
-    </form>
+    </div>
   )
 }
 
@@ -45,7 +54,7 @@ export const NewItem: React.FC<{ addItem: (desc: string) => void }> = ({ addItem
   const [desc, setDesc] = useState('')
 
   return (
-    <div>
+    <div className="todo-item">
       <input
         value={desc}
         placeholder="New todo"

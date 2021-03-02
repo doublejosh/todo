@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useCallback } from 'react'
-import './App.css'
+import React, { useState, useCallback, useEffect } from 'react'
+import './App.scss'
 import { Todo } from './components/Todo'
 import { ListView } from './components/List'
 import { Button } from './components/Button'
@@ -10,9 +10,10 @@ import { default as sampleData } from './test/data/sample-todos.json'
 
 const App: React.FC<{}> = () => {
   const [todoList, setTodos] = useState<Map<string, Todo>>(new Map())
-  // maps don't seem to allow state listening
+  // maps don't seem to allow state listening via useEffect
   const [, updateState] = React.useState<object>()
   const forceUpdate = useCallback(() => updateState({}), [])
+  const [doneCount, setDoneCount] = useState<number>(0)
 
   const updateMap = (k: string, v: Todo) => {
     setTodos(todoList.set(k, v))
@@ -60,11 +61,20 @@ const App: React.FC<{}> = () => {
     forceUpdate()
   }
 
+  useEffect(() => {
+    let howManyDone = 0
+    Array.from(todoList.keys()).map((id: string) => {
+      if (todoList.get(id)?.done === true) howManyDone++
+    })
+    setDoneCount(howManyDone)
+    // stuck observing functions, the map doesn't work.
+  }, [updateMap, deleteItem, addItem, clearList, loadSample])
+
   return (
     <div className="App">
       <header className="App-header">
         <h1>TODOS</h1>
-        <p>You have {todoList.size} things to do.</p>
+        <p>{`You have ${doneCount}/${todoList.size} things to do.`}</p>
         <ListView
           todoList={{ todos: todoList }}
           setItem={setItem}
