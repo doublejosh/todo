@@ -34,9 +34,9 @@ export const TodoView: React.FC<TodoViewProps> = ({ item, ...props }) => {
   return (
     <form>
       <input placeholder="New todo" value={item.desc} onChange={handleChange} />
-      <Button label="Delete" onClick={() => props.deleteItem(item.id)} />
       <Button label="Done!" onClick={() => handleDone} />
       {desc !== descInit && <Button label="Save" onClick={handleSave} />}
+      <Button label="Delete" onClick={() => props.deleteItem(item.id)} />
     </form>
   )
 }
@@ -56,6 +56,7 @@ export const NewItem: React.FC<{ addItem: (desc: string) => void }> = ({ addItem
         onClick={() => {
           if (desc) {
             addItem(desc)
+            setDesc('')
           }
         }}
       />

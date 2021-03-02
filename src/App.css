@@ -33,6 +33,10 @@ button {
   padding: 10px 20px;
 }
 
+h1 {
+  margin-bottom: 0;
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);

@@ -60,14 +60,11 @@ const App: React.FC<{}> = () => {
     forceUpdate()
   }
 
-  useEffect(() => {
-    console.log('BUILDING!')
-  }, [updateMap, addItem, setItem, deleteItem])
-
   return (
     <div className="App">
       <header className="App-header">
         <h1>TODOS</h1>
+        <p>You have {todoList.size} things to do.</p>
         <ListView
           todoList={{ todos: todoList }}
           setItem={setItem}
