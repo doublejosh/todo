@@ -1,4 +1,3 @@
-import { buildQueries } from '@testing-library/react'
 import React, { useEffect } from 'react'
 import { TodoView, Todo, NewItem } from './Todo'
 
