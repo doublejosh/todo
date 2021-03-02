@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { TodoView, Todo, NewItem } from './Todo'
 
 export interface List {
@@ -14,22 +14,29 @@ interface ListViewProps {
 }
 
 export const ListView: React.FC<ListViewProps> = ({ todoList, ...props }) => {
+  const builtList: JSX.Element[] = []
+
+  useEffect(() => {
+    console.log('Building!')
+
+    todoList.todos.forEach((item, key) => {
+      builtList.push(
+        <TodoView
+          key={key}
+          item={item}
+          setItem={props.setItem}
+          deleteItem={props.deleteItem}
+        />
+      )
+    })
+  }, [todoList.todos])
+
   return (
     <div>
-      {[todoList.todos.keys()].map((id: IterableIterator<string>, index: number) => {
-        const item = todoList.todos.get((id as unknown) as string)
-        if (item) {
-          return (
-            <TodoView
-              key={index}
-              item={item}
-              setItem={props.setItem}
-              deleteItem={props.deleteItem}
-            />
-          )
-        } else return
-      })}
+      {builtList}
+      <hr />
       <NewItem addItem={props.addItem} />
+      <hr />
     </div>
   )
 }

@@ -47,10 +47,18 @@ export const NewItem: React.FC<{ addItem: (desc: string) => void }> = ({ addItem
   return (
     <div>
       <input
+        value={desc}
         placeholder="New todo"
         onChange={(e: React.ChangeEvent<HTMLInputElement>) => setDesc(e.target.value)}
       />
-      <Button label="Add" onClick={() => addItem(desc)} />
+      <Button
+        label="Add"
+        onClick={() => {
+          if (desc) {
+            addItem(desc)
+          }
+        }}
+      />
       <Button label="Cancel" onClick={() => setDesc('')} />
     </div>
   )

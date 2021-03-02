@@ -1,10 +1,11 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import './App.css'
 import { Todo } from './components/Todo'
 import { ListView } from './components/List'
-import { stringHash } from './utils/stringHash'
 import { Button } from './components/Button'
 import { sha256 } from 'crypto-hash'
+
+import { default as sampleData } from './test/data/sample-todos.json'
 
 const App: React.FC<{}> = () => {
   const [todoList, setTodos] = useState<Map<string, Todo>>(new Map())
@@ -12,9 +13,8 @@ const App: React.FC<{}> = () => {
     setTodos(todoList.set(k, v))
   }
 
-  const date = new Date()
-
   const setItem = (item: Todo) => {
+    const date = new Date()
     updateMap(item.id, { ...item, updated: date.toString() })
   }
 
@@ -33,26 +33,35 @@ const App: React.FC<{}> = () => {
         created: date.toString(),
         updated: date.toString(),
       })
-      console.log(hash)
     })
   }
+
+  const clearList = () => {
+    setTodos(new Map())
+  }
+
+  const loadSample = () => {
+    const sampleList = new Map()
+    sampleData.forEach(t => {
+      sampleList.set(t.id, t)
+    })
+    setTodos(sampleList)
+  }
+
+  useEffect(() => {}, [updateMap, addItem])
 
   return (
     <div className="App">
       <header className="App-header">
-        <h1>#TODOS!</h1>
-        <Button
-          label="WTF!"
-          onClick={() => {
-            console.log('wat')
-          }}
-        />
+        <h1>TODOS</h1>
         <ListView
           todoList={{ todos: todoList }}
           setItem={setItem}
           deleteItem={deleteItem}
           addItem={addItem}
         />
+        <Button label="Load Samples" onClick={loadSample} />
+        <Button label="Clear List" onClick={clearList} />
       </header>
     </div>
   )
