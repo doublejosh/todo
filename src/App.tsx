@@ -23,12 +23,14 @@ const App: React.FC<{}> = () => {
   const setItem = (item: Todo) => {
     const date = new Date()
     updateMap(item.id, { ...item, updated: date.toString() })
+    logger('Item Updated')
   }
 
   const deleteItem = (id: string) => {
     todoList.delete(id)
     setTodos(todoList)
     forceUpdate()
+    logger('Item Deleted')
   }
 
   const addItem = async (desc: string) => {

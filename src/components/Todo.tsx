@@ -7,6 +7,7 @@ import {
   FaPlusCircle,
   FaEraser,
 } from 'react-icons/fa'
+import { logger } from '../utils/logger'
 
 export interface Todo {
   id: string
@@ -32,10 +33,12 @@ export const TodoView: React.FC<TodoViewProps> = ({ item, ...props }) => {
 
   const handleDoneToggle = (item: Todo, done: boolean = true) => {
     props.setItem({ ...item, desc, done })
+    logger(`Item Toggled - ${done ? 'Done' : 'Incomplete'}`)
   }
 
   const handleSave = (item: Todo) => {
     props.setItem({ ...item, desc })
+    logger('Item Saved')
   }
 
   return (
