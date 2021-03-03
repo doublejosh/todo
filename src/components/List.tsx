@@ -29,7 +29,6 @@ export const ListView: React.FC<ListViewProps> = ({ todoList, ...props }) => {
           />
         ) : null
       })}
-      <hr />
       <NewItem addItem={props.addItem} />
       <hr />
     </div>

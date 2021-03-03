@@ -72,23 +72,30 @@ export const TodoView: React.FC<TodoViewProps> = ({ item, ...props }) => {
 export const NewItem: React.FC<{ addItem: (desc: string) => void }> = ({ addItem }) => {
   const [desc, setDesc] = useState('')
 
+  const handleChange = (desc: string) => {
+    if (desc) {
+      addItem(desc)
+      setDesc('')
+    }
+  }
+
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    console.log(event)
+
+    if (event.key === 'Enter') {
+      handleChange(desc)
+    }
+  }
+
   return (
-    <div className="todo-item">
+    <div className="todo-item todo-item--new">
       <input
         value={desc}
         placeholder="New todo"
         onChange={(e: React.ChangeEvent<HTMLInputElement>) => setDesc(e.target.value)}
+        onKeyDown={handleKeyDown}
       />
-      <Button
-        label="Add"
-        icon={<FaPlusCircle />}
-        onClick={() => {
-          if (desc) {
-            addItem(desc)
-            setDesc('')
-          }
-        }}
-      />
+      <Button label="Add" icon={<FaPlusCircle />} onClick={() => handleChange(desc)} />
       <Button label="Cancel" icon={<FaEraser />} onClick={() => setDesc('')} />
     </div>
   )
