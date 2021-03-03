@@ -43,13 +43,13 @@ export const TodoView: React.FC<TodoViewProps> = ({ item, ...props }) => {
       {!item.done ? (
         <Button
           label="Done"
-          icon={<FaCheckCircle />}
+          icon={<FaRegCheckCircle />}
           onClick={() => handleDoneToggle(item)}
         />
       ) : (
         <Button
           label="Todo"
-          icon={<FaRegCheckCircle />}
+          icon={<FaCheckCircle />}
           onClick={() => handleDoneToggle(item, false)}
         />
       )}

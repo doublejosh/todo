@@ -10,7 +10,7 @@ import { default as sampleData } from './test/data/sample-todos.json'
 
 const App: React.FC<{}> = () => {
   const [todoList, setTodos] = useState<Map<string, Todo>>(new Map())
-  // maps don't seem to allow state listening via useEffect
+  // Map is by reference, state won't update
   const [, updateState] = React.useState<object>()
   const forceUpdate = useCallback(() => updateState({}), [])
   const [doneCount, setDoneCount] = useState<number>(0)
@@ -67,14 +67,23 @@ const App: React.FC<{}> = () => {
       if (todoList.get(id)?.done === true) howManyDone++
     })
     setDoneCount(howManyDone)
-    // stuck observing functions, the map doesn't work.
+    // stuck observing functions, Map state by reference
   }, [updateMap, deleteItem, addItem, clearList, loadSample])
+
+  const getMessage = (length: number, done: number) => {
+    if (done === 0) {
+      return "Let's get started"
+    }
+    if (length - done === 0) {
+      return 'Everything is done!'
+    }
+    return `Just ${done}/${length} left.`
+  }
 
   return (
     <div className="App">
       <header className="App-header">
-        <h1>TODOS</h1>
-        <p>{`You have ${doneCount}/${todoList.size} things to do.`}</p>
+        <h3>{getMessage(todoList.size, doneCount)}</h3>
         <ListView
           todoList={{ todos: todoList }}
           setItem={setItem}

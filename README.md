@@ -1,1 +1,3 @@
-# Quick Todo Challenge
+# Todo!
+
+(React + TypeScript)
